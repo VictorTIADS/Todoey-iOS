@@ -9,6 +9,7 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class CategoryViewController: SwipeTableViewController {
     
@@ -23,6 +24,12 @@ class CategoryViewController: SwipeTableViewController {
         loadItems()
         
         tableView.rowHeight = 80.0
+        tableView.separatorStyle = .none
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        guard let navBar = navigationController?.navigationBar else {fatalError()}
+        navBar.backgroundColor = UIColor(hexString: "1D9BBF6")
     }
 
     
@@ -45,6 +52,7 @@ class CategoryViewController: SwipeTableViewController {
     func addItem(_ text: String){
         let item = Category()
         item.name = text
+        item.color = UIColor.randomFlat().hexValue()
         save(category: item)
     }
    
@@ -88,6 +96,8 @@ class CategoryViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
 
         cell.textLabel?.text = categoryList?[indexPath.row].name ?? "No Categories added yet"
+        
+        cell.backgroundColor = UIColor(hexString: categoryList?[indexPath.row].color ?? "#FFFFFF")
         
         return cell
     }
